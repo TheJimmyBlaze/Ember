@@ -17,12 +17,15 @@ type Config struct {
 func (config *Config) init() {
 	if config.Address == "" {
 		config.Address = "0.0.0.0"
+		log.Printf("Using default Address: %s", config.Address)
 	}
 	if config.Port == 0 {
 		config.Port = 443
+		log.Printf("Using default Port: %d", config.Port)
 	}
 	if config.DBFileName == "" {
 		config.DBFileName = "ember.sqlite3"
+		log.Printf("Using default DBFileName: %s", config.DBFileName)
 	}
 }
 

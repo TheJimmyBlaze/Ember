@@ -9,6 +9,7 @@ import (
 	"github.com/thejimmyblaze/ember/api"
 	"github.com/thejimmyblaze/ember/authority"
 	"github.com/thejimmyblaze/ember/config"
+	"github.com/thejimmyblaze/ember/database"
 	"github.com/thejimmyblaze/ember/version"
 )
 
@@ -33,18 +34,27 @@ func main() {
 
 func configure(fileName string) (*authority.Authority, error) {
 
+	log.Print("Configuring...")
+
 	config, err := config.LoadConfiguration(fileName)
 	if err != nil {
 		return nil, err
 	}
 
-	authority, err := authority.New(config)
+	db, err := database.New(config)
+	if err != nil {
+		return nil, err
+	}
+
+	authority, err := authority.New(db, config)
+
 	return authority, err
 }
 
 func start(authority *authority.Authority) error {
 
 	log.Print("Starting Ember CA API server...")
+	defer authority.Shutdown()
 
 	router := chi.NewRouter()
 	api := api.New(authority)
