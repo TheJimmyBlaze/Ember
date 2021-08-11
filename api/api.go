@@ -20,13 +20,14 @@ type APIHandler struct {
 }
 
 func New(authority *authority.Authority) RouteHandler {
+
 	return &APIHandler{
 		authority: authority,
 	}
 }
 
 func (h *APIHandler) Route(r Router) {
-	log.Print("Registering Routes...")
 
+	log.Print("Registering Routes...")
 	r.MethodFunc("GET", "/version", h.Version)
 }

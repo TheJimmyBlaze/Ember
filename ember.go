@@ -12,9 +12,10 @@ import (
 	"github.com/thejimmyblaze/ember/version"
 )
 
-const configFileName = "ember.json"
+const configFileName = "config.json"
 
 func main() {
+
 	log.Printf("Ember - X.509 Crypto Service - %s", version.BuildVersion)
 	log.Printf("Build Time: %s", version.BuildTime)
 	log.Printf("Build Hash: %s", version.BuildHash)
@@ -31,6 +32,7 @@ func main() {
 }
 
 func configure(fileName string) (*authority.Authority, error) {
+
 	config, err := config.LoadConfiguration(fileName)
 	if err != nil {
 		return nil, err
@@ -41,6 +43,7 @@ func configure(fileName string) (*authority.Authority, error) {
 }
 
 func start(authority *authority.Authority) error {
+
 	log.Print("Starting Ember CA API server...")
 
 	router := chi.NewRouter()
@@ -50,7 +53,7 @@ func start(authority *authority.Authority) error {
 	config := authority.Config
 	host := fmt.Sprintf("%s:%d", config.Address, config.Port)
 
-	log.Printf("Binding to: %s", host)
+	log.Printf("Binding to: %s...", host)
 
 	log.Printf("Ember CA Started")
 	err := http.ListenAndServe(host, router)
