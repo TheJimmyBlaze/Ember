@@ -23,6 +23,11 @@ func New(config *config.Config) (*EmberDB, error) {
 	emberDB := EmberDB{
 		SQL: db,
 	}
+	err = emberDB.initializeTables()
+	if err != nil {
+		return nil, err
+	}
+
 	return &emberDB, nil
 }
 
