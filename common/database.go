@@ -1,4 +1,4 @@
-package shared_interface
+package common
 
 import "database/sql"
 

@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"log"
 
-	shared "github.com/thejimmyblaze/ember/database/shared_interface"
+	"github.com/thejimmyblaze/ember/common"
 )
 
 type Migration001 struct {
-	DB shared.Database
+	DB common.Database
 }
 
 const Version int = 1
@@ -26,7 +26,7 @@ func (migration *Migration001) ApplyMigration() error {
 	return err
 }
 
-func runSchemaUpdate(db shared.Database) error {
+func runSchemaUpdate(db common.Database) error {
 
 	if err := createVersionTable(db); err != nil {
 		return err
@@ -51,7 +51,7 @@ func runSchemaUpdate(db shared.Database) error {
 	return nil
 }
 
-func setSchemaVersion(db shared.Database) error {
+func setSchemaVersion(db common.Database) error {
 
 	statement := `
 	delete from version;
@@ -66,7 +66,7 @@ func setSchemaVersion(db shared.Database) error {
 	return err
 }
 
-func createVersionTable(db shared.Database) error {
+func createVersionTable(db common.Database) error {
 
 	statement := `
 	create table if not exists version (
@@ -86,7 +86,7 @@ func createVersionTable(db shared.Database) error {
 	return err
 }
 
-func createSignatureAlgorithmTable(db shared.Database) error {
+func createSignatureAlgorithmTable(db common.Database) error {
 
 	statement := `
 	create table if not exists signature_algorithm (
@@ -103,7 +103,7 @@ func createSignatureAlgorithmTable(db shared.Database) error {
 	return err
 }
 
-func createCertificateTable(db shared.Database) error {
+func createCertificateTable(db common.Database) error {
 
 	statement := `
 	create table if not exists certificate (
@@ -125,7 +125,7 @@ func createCertificateTable(db shared.Database) error {
 	return err
 }
 
-func createAuthorityRoleTable(db shared.Database) error {
+func createAuthorityRoleTable(db common.Database) error {
 
 	statement := `
 	create table if not exists authority_role (
@@ -140,7 +140,7 @@ func createAuthorityRoleTable(db shared.Database) error {
 	return err
 }
 
-func createAuthorityTable(db shared.Database) error {
+func createAuthorityTable(db common.Database) error {
 
 	statement := `
 	create table if not exists authority (

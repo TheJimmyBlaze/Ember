@@ -4,35 +4,35 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/thejimmyblaze/ember/config"
-	shared "github.com/thejimmyblaze/ember/database/shared_interface"
+	"github.com/thejimmyblaze/ember/common"
 )
 
-type EmberDB struct {
+type Database struct {
 	SQL *sql.DB
 }
 
-func New(config *config.Config) (*EmberDB, error) {
+func New(config common.Config) (*Database, error) {
 
-	log.Printf("Preparing Ember Database: %s...", config.DBFileName)
+	dbFileName := config.GetDBFileName()
+	log.Printf("Preparing Ember Database: %s...", dbFileName)
 
-	db, err := sql.Open("sqlite3", config.DBFileName)
+	db, err := sql.Open("sqlite3", dbFileName)
 	if err != nil {
 		return nil, err
 	}
 
-	emberDB := EmberDB{
+	database := Database{
 		SQL: db,
 	}
-	err = emberDB.runMigrations()
+	err = database.runMigrations()
 	if err != nil {
 		return nil, err
 	}
 
-	return &emberDB, nil
+	return &database, nil
 }
 
-func (db *EmberDB) ExecuteTransaction(function shared.QueryFunction) error {
+func (db *Database) ExecuteTransaction(function common.QueryFunction) error {
 
 	transaction, err := db.Begin()
 	if err != nil {
@@ -51,18 +51,18 @@ func (db *EmberDB) ExecuteTransaction(function shared.QueryFunction) error {
 	return nil
 }
 
-func (db *EmberDB) Begin() (*sql.Tx, error) {
+func (db *Database) Begin() (*sql.Tx, error) {
 	return db.SQL.Begin()
 }
 
-func (db *EmberDB) Execute(statement string, args ...interface{}) (sql.Result, error) {
+func (db *Database) Execute(statement string, args ...interface{}) (sql.Result, error) {
 	return db.SQL.Exec(statement, args...)
 }
 
-func (db *EmberDB) Query(statement string, args ...interface{}) (*sql.Rows, error) {
+func (db *Database) Query(statement string, args ...interface{}) (*sql.Rows, error) {
 	return db.SQL.Query(statement, args...)
 }
 
-func (db *EmberDB) Close() {
+func (db *Database) Close() {
 	db.SQL.Close()
 }

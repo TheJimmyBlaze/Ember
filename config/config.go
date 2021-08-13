@@ -14,22 +14,7 @@ type Config struct {
 	DBFileName string `json:"dbFileName"`
 }
 
-func (config *Config) init() {
-	if config.Address == "" {
-		config.Address = "0.0.0.0"
-		log.Printf("Using default Address: %s", config.Address)
-	}
-	if config.Port == 0 {
-		config.Port = 443
-		log.Printf("Using default Port: %d", config.Port)
-	}
-	if config.DBFileName == "" {
-		config.DBFileName = "ember.sqlite3"
-		log.Printf("Using default DBFileName: %s", config.DBFileName)
-	}
-}
-
-func LoadConfiguration(fileName string) (*Config, error) {
+func New(fileName string) (*Config, error) {
 	log.Printf("Loading configuration: %s...", fileName)
 
 	file, err := os.Open(fileName)
@@ -46,4 +31,31 @@ func LoadConfiguration(fileName string) (*Config, error) {
 
 	config.init()
 	return &config, nil
+}
+
+func (config *Config) init() {
+	if config.Address == "" {
+		config.Address = "0.0.0.0"
+		log.Printf("Using default Address: %s", config.Address)
+	}
+	if config.Port == 0 {
+		config.Port = 443
+		log.Printf("Using default Port: %d", config.Port)
+	}
+	if config.DBFileName == "" {
+		config.DBFileName = "ember.sqlite3"
+		log.Printf("Using default DBFileName: %s", config.DBFileName)
+	}
+}
+
+func (config *Config) GetAddress() string {
+	return config.Address
+}
+
+func (config *Config) GetPort() int {
+	return config.Port
+}
+
+func (config *Config) GetDBFileName() string {
+	return config.DBFileName
 }

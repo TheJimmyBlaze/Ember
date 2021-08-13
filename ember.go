@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/thejimmyblaze/ember/api"
 	"github.com/thejimmyblaze/ember/authority"
+	"github.com/thejimmyblaze/ember/common"
 	"github.com/thejimmyblaze/ember/config"
 	"github.com/thejimmyblaze/ember/database"
 	"github.com/thejimmyblaze/ember/version"
@@ -36,7 +37,7 @@ func configure(fileName string) (*authority.Authority, error) {
 
 	log.Print("Configuring...")
 
-	config, err := config.LoadConfiguration(fileName)
+	config, err := config.New(fileName)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +52,7 @@ func configure(fileName string) (*authority.Authority, error) {
 	return authority, err
 }
 
-func start(authority *authority.Authority) error {
+func start(authority common.Authority) error {
 
 	log.Print("Starting Ember CA API server...")
 	defer authority.Shutdown()
@@ -60,8 +61,10 @@ func start(authority *authority.Authority) error {
 	api := api.New(authority)
 	api.Route(router)
 
-	config := authority.Config
-	host := fmt.Sprintf("%s:%d", config.Address, config.Port)
+	config := authority.GetConfig()
+	address := config.GetAddress()
+	port := config.GetPort()
+	host := fmt.Sprintf("%s:%d", address, port)
 
 	log.Printf("Binding to: %s...", host)
 

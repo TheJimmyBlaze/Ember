@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/thejimmyblaze/ember/authority"
+	"github.com/thejimmyblaze/ember/common"
 )
 
 type Router interface {
@@ -16,10 +16,10 @@ type RouteHandler interface {
 }
 
 type APIHandler struct {
-	authority *authority.Authority
+	authority common.Authority
 }
 
-func New(authority *authority.Authority) RouteHandler {
+func New(authority common.Authority) RouteHandler {
 
 	return &APIHandler{
 		authority: authority,

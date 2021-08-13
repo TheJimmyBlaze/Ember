@@ -11,7 +11,7 @@ type Migration interface {
 	ApplyMigration() error
 }
 
-func (db *EmberDB) runMigrations() error {
+func (db *Database) runMigrations() error {
 
 	migrations := [...]Migration{
 		&migration.Migration001{
@@ -38,7 +38,7 @@ func (db *EmberDB) runMigrations() error {
 	return nil
 }
 
-func (db *EmberDB) getSchemaVersion() (int, error) {
+func (db *Database) getSchemaVersion() (int, error) {
 
 	statement := "select schema_version from version;"
 
