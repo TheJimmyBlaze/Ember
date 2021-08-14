@@ -1,4 +1,4 @@
-package ember
+package internal
 
 import (
 	"fmt"

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/thejimmyblaze/ember/ember"
+	"github.com/thejimmyblaze/ember/internal"
 	"github.com/thejimmyblaze/ember/version"
 )
 
@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 on a home lab or small business PKI. Ember CA provides the siging capability to the Ember system.
 Ember CA uses a Certificate Authority certificate to issue, record, and revoke end-entity certificates`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ember.Launch()
+		internal.Launch()
 	},
 }
 
