@@ -24,6 +24,6 @@ Write-Host "Build Hash: $BuildHash"
 
 #go build
 Write-Host "Building..."
-go build -ldflags="-X 'github.com/thejimmyblaze/ember/version.BuildVersion=$BuildVersion' -X 'github.com/thejimmyblaze/ember/version.BuildTime=$BuildTime' -X 'github.com/thejimmyblaze/ember/version.BuildHash=$BuildHash'" -o Ember.exe
+go build -ldflags="-X 'github.com/thejimmyblaze/ember/version.BuildVersion=$BuildVersion' -X 'github.com/thejimmyblaze/ember/version.BuildTime=$BuildTime' -X 'github.com/thejimmyblaze/ember/version.BuildHash=$BuildHash'" -o ember-ca.exe
 
 Write-Host "Done"

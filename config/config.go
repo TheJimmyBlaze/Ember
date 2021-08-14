@@ -8,6 +8,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+const DefaultConfigFileName = "config.json"
+
 type Config struct {
 	Address    string `json:"address"`
 	Port       int    `json:"port"`

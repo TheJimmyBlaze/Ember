@@ -1,4 +1,4 @@
-package main
+package ember
 
 import (
 	"fmt"
@@ -14,15 +14,13 @@ import (
 	"github.com/thejimmyblaze/ember/version"
 )
 
-const configFileName = "config.json"
-
-func main() {
+func Launch() {
 
 	log.Printf("Ember - X.509 Crypto Service - %s", version.BuildVersion)
 	log.Printf("Build Time: %s", version.BuildTime)
 	log.Printf("Build Hash: %s", version.BuildHash)
 
-	authority, err := configure(configFileName)
+	authority, err := configure(config.DefaultConfigFileName)
 	if err != nil {
 		log.Fatal(err)
 	}
