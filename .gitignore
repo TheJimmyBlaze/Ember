@@ -15,3 +15,5 @@
 # vendor/
 
 *.sqlite3
+*.csr
+*.key
