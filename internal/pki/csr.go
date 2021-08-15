@@ -52,7 +52,7 @@ func CreateCertificateSigningRequest(csrFileName string,
 
 	//Save CSR and Key
 	log.Print("Saving data...")
-	err = Export(request, csrFileName)
+	err = export(request, csrFileName)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func buildCSR(subjectName string, key *Key) ([]byte, error) {
 	return csr, nil
 }
 
-func Export(request []byte, fileName string) error {
+func export(request []byte, fileName string) error {
 
 	log.Print("Converting CSR to PEM format...")
 
