@@ -5,7 +5,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thejimmyblaze/ember/internal"
-	"github.com/thejimmyblaze/ember/version"
 )
 
 var rootCmd = &cobra.Command{
@@ -19,21 +18,8 @@ Ember CA uses a Certificate Authority certificate to issue, record, and revoke e
 	},
 }
 
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Prints the version information of Ember CA",
-	Long:  "Prints the build version, when the build was created, and the hash of the build files",
-	Run: func(cmd *cobra.Command, args []string) {
-		version.PrintVersionInformation()
-	},
-}
-
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func init() {
-	rootCmd.AddCommand(versionCmd)
 }
