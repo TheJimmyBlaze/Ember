@@ -3,6 +3,7 @@ package pki
 import (
 	"crypto"
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -18,12 +19,22 @@ const PKAlgorithmECDSA string = "ECDSA"
 
 const PEMBlockTypePK string = "PRIVATE KEY"
 
+var ellipticCurveDetails = []struct {
+	curve elliptic.Curve
+	name  string
+}{
+	{elliptic.P224(), "P225"},
+	{elliptic.P256(), "P256"},
+	{elliptic.P384(), "P384"},
+	{elliptic.P521(), "P521"},
+}
+
 type Key struct {
 	Private crypto.PrivateKey
 	Public  crypto.PublicKey
 }
 
-func CreateKeyPair(publicKeyAlgorithm string, publicKeyCurve string, keyLength int) (*Key, error) {
+func CreateKey(publicKeyAlgorithm string, publicKeyCurve string, keyLength int) (*Key, error) {
 
 	log.Print("Generating CSR key pair...")
 
@@ -88,4 +99,19 @@ func (key *Key) Export(fileName string) error {
 		return fmt.Errorf("unable to encode PK PEM block: %s", err)
 	}
 	return err
+}
+
+func determineCurve(publicKeyCurve string) (curve elliptic.Curve, err error) {
+
+	log.Printf("converting Curve Name: %s to elliptic curve...", publicKeyCurve)
+
+	for _, details := range ellipticCurveDetails {
+		if details.name == publicKeyCurve {
+			curve = details.curve
+		}
+	}
+	if curve == nil {
+		return nil, fmt.Errorf("elliptic curve: %s unrecognised or unsupported", publicKeyCurve)
+	}
+	return curve, nil
 }

@@ -1,10 +1,12 @@
-package authority
+package pki
 
 import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/thejimmyblaze/ember/common"
+	"github.com/thejimmyblaze/ember/config"
+	"github.com/thejimmyblaze/ember/database"
 )
 
 type Authority struct {
@@ -12,9 +14,19 @@ type Authority struct {
 	db     common.Database
 }
 
-func New(db common.Database, config common.Config) (*Authority, error) {
+func CreateAuthority(configFileName string) (*Authority, error) {
 
-	log.Print("Configuring Authority...")
+	log.Print("Creating Authority...")
+
+	config, err := config.New(configFileName)
+	if err != nil {
+		return nil, err
+	}
+
+	db, err := database.New(config)
+	if err != nil {
+		return nil, err
+	}
 
 	auth := &Authority{
 		config: config,
