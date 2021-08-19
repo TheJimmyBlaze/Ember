@@ -43,6 +43,27 @@ func CreateCSR(subjectName string, publicKeyAlgorithm string, publicKeyCurve str
 	return csr, nil
 }
 
+func LoadCSR(fileName string) (csr *x509.CertificateRequest, err error) {
+
+	//Open File
+	pemBytes, err := os.ReadFile(fileName)
+	if err != nil {
+		return csr, fmt.Errorf("unable to open CSR file: %s, error: %s", fileName, err)
+	}
+
+	//Decode PEM to DER
+	pemBlock, _ := pem.Decode(pemBytes)
+	derBytes := pemBlock.Bytes
+
+	//Parse
+	csr, err = x509.ParseCertificateRequest(derBytes)
+	if err != nil {
+		return csr, fmt.Errorf("unable to parse CSR from file data: %s, error: %s", fileName, err)
+	}
+
+	return csr, nil
+}
+
 func generateCSR(subjectName string, key *Key) (*CSR, error) {
 
 	log.Print("Creating CSR...")

@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
+	"github.com/thejimmyblaze/ember/pki"
 )
+
+//Some flags are used from root.go
 
 var selfSignCmd = &cobra.Command{
 	Use:   "self-sign",
@@ -23,6 +24,21 @@ func init() {
 }
 
 func signCSR() error {
-	log.Printf("Ding :)")
+
+	//Load CSR
+	csr, err := pki.LoadCSR(csrFileName)
+	if err != nil {
+		return err
+	}
+
+	//Load Key
+	key, err := pki.LoadKey(keyFileName)
+	if err != nil {
+		return err
+	}
+
+	_ = csr
+	_ = key
+
 	return nil
 }

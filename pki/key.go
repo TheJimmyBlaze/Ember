@@ -72,6 +72,43 @@ func CreateKey(publicKeyAlgorithm string, publicKeyCurve string, keyLength int) 
 	return nil, errors.New("key pair creation failed, no public key algorithm was available")
 }
 
+func LoadKey(fileName string) (*Key, error) {
+
+	//Open File
+	pemBytes, err := os.ReadFile(fileName)
+	if err != nil {
+		return nil, fmt.Errorf("unable to open PK file: %s, error: %s", fileName, err)
+	}
+
+	//Convert PEM to DER
+	pemBlock, _ := pem.Decode(pemBytes)
+	derBytes := pemBlock.Bytes
+
+	//Parse key
+	keyInterface, err := x509.ParsePKCS8PrivateKey(derBytes)
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse PKCS8 key from file: %s, error: %s", fileName, err)
+	}
+
+	//Cast to crypto.Signer
+	var privateKey crypto.Signer = nil
+	switch mysteryKey := keyInterface.(type) {
+	case *rsa.PrivateKey:
+		privateKey = crypto.Signer(mysteryKey)
+	case *ecdsa.PrivateKey:
+		privateKey = crypto.Signer(mysteryKey)
+	default:
+		return nil, fmt.Errorf("PK not in recognised format, key must be a PKCS8 formatted RSA or ECDSA key")
+	}
+
+	//Return key
+	key := &Key{
+		Private: privateKey,
+		Public:  privateKey.Public,
+	}
+	return key, nil
+}
+
 func (key *Key) Export(fileName string) error {
 
 	log.Print("Converting PK to PEM format...")

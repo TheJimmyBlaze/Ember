@@ -5,6 +5,8 @@ import (
 	"github.com/thejimmyblaze/ember/pki"
 )
 
+//Some flags are used from root.go
+
 var subjectName string        //-n
 var publicKeyAlgorithm string //-a
 var publicKeyCurve string     //-u
