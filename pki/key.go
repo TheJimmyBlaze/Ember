@@ -30,7 +30,7 @@ var ellipticCurveDetails = []struct {
 }
 
 type Key struct {
-	Private crypto.PrivateKey
+	Private crypto.Signer
 	Public  crypto.PublicKey
 }
 
@@ -91,22 +91,22 @@ func LoadKey(fileName string) (*Key, error) {
 	}
 
 	//Cast to crypto.Signer
-	var privateKey crypto.Signer = nil
-	switch mysteryKey := keyInterface.(type) {
+	switch privateKey := keyInterface.(type) {
 	case *rsa.PrivateKey:
-		privateKey = crypto.Signer(mysteryKey)
+		key := &Key{
+			Private: privateKey,
+			Public:  &privateKey.PublicKey,
+		}
+		return key, nil
 	case *ecdsa.PrivateKey:
-		privateKey = crypto.Signer(mysteryKey)
+		key := &Key{
+			Private: privateKey,
+			Public:  &privateKey.PublicKey,
+		}
+		return key, nil
 	default:
 		return nil, fmt.Errorf("PK not in recognised format, key must be a PKCS8 formatted RSA or ECDSA key")
 	}
-
-	//Return key
-	key := &Key{
-		Private: privateKey,
-		Public:  privateKey.Public,
-	}
-	return key, nil
 }
 
 func (key *Key) Export(fileName string) error {
